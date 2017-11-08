@@ -43,7 +43,7 @@ public class RequestScopeCache extends AbstractValueAdaptingCache {
 
     @Override
     public void put(Object key, Object value) {
-        this.storage.put(key, value);
+        this.storage.put(key, toStoreValue(value));
     }
 
     @Override
