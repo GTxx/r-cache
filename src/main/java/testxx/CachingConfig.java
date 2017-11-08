@@ -13,7 +13,7 @@ public class CachingConfig extends CachingConfigurerSupport{
 
     @Bean(name = "requestCacheManager")
     @Primary
-    CacheManager getCacheManager(){
+    CacheManager requestScopeCacheManager(){
         CacheManager cacheManager = new RequestScopeCacheManager();
         return cacheManager;
     }

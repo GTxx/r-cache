@@ -1,18 +1,12 @@
 package testxx;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.support.AbstractCacheManager;
-import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Collections;
 
-@Component
 public class RequestScopeCacheManager extends AbstractCacheManager{
-
-    @Autowired
-    RequestScopeCacheStorage requestScopeCacheStorage;
 
     @Override
     protected Collection<? extends Cache> loadCaches() {
@@ -20,6 +14,6 @@ public class RequestScopeCacheManager extends AbstractCacheManager{
     }
 
     protected Cache getMissingCache(String name){
-        return new RequestScopeCache(name, requestScopeCacheStorage);
+        return new RequestScopeCache(name);
     }
 }

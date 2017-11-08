@@ -9,14 +9,13 @@ import java.util.concurrent.TimeUnit;
 public class Tservice {
     @Cacheable(cacheNames = "book", cacheManager = "requestCacheManager")
     public Long g(long x) throws InterruptedException {
-        TimeUnit.SECONDS.sleep(3l);
-        System.out.println("sleep 3s");
+        System.out.println(Thread.currentThread().getName() + ", visit book");
         return x;
     }
 
     @Cacheable(cacheNames = "user", cacheManager = "requestCacheManager")
     public Long user(long x) throws InterruptedException {
-        TimeUnit.SECONDS.sleep(2l);
+        System.out.println(Thread.currentThread().getName() + ", visit user");
         return x;
     }
 }

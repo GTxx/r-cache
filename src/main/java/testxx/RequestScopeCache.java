@@ -9,16 +9,12 @@ public class RequestScopeCache extends AbstractValueAdaptingCache {
 
     private String name;
 
-    /**
-     * store的生命周期为request scope，每个request都创建一个store，request结束就回收store
-     */
-    private RequestScopeCacheStorage store;
+    private ThreadLocalStorage storage;
 
-    public RequestScopeCache(String name, RequestScopeCacheStorage store){
+    public RequestScopeCache(String name){
         super(true);
         this.name = name;
-//        store.getStore().put(name, new HashMap<>());
-        this.store = store;
+        this.storage = new ThreadLocalStorage(name);
     }
 
     /**
@@ -28,7 +24,7 @@ public class RequestScopeCache extends AbstractValueAdaptingCache {
      */
     @Override
     protected Object lookup(Object key) {
-        return this.store.lookup(getName(), key);
+        return this.storage.lookup(key);
     }
 
     /**
@@ -42,12 +38,12 @@ public class RequestScopeCache extends AbstractValueAdaptingCache {
 
     @Override
     public Object getNativeCache() {
-        return this.store;
+        return this.storage;
     }
 
     @Override
     public void put(Object key, Object value) {
-        this.store.put(getName(), key, value);
+        this.storage.put(key, value);
     }
 
     @Override
@@ -62,11 +58,15 @@ public class RequestScopeCache extends AbstractValueAdaptingCache {
 
     @Override
     public void clear() {
-        throw new RuntimeException("request scope cache no need to support this method");
+        this.storage.resetInheritableCacheHolder();
     }
 
     @Override
     public <T> T get(Object key, Callable<T> valueLoader) {
         throw new RuntimeException("request scope cache no need to support this method");
+    }
+
+    public Boolean isEmpty(){
+        return storage.isEmpty();
     }
 }
